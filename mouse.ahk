@@ -1,5 +1,5 @@
 #suspendexempt
-#p::
+!p::
 {
     Suspend -1  
     
@@ -44,9 +44,13 @@ $!j::HandleMouseMove("!j")
 $!k::HandleMouseMove("!k")
 $d::HandleMouseMove("d")
 $Space:: HandleMouseMove("Space")
-$!Space Up:: HandleMouseMove("!Space")
-$^!Space Up:: HandleMouseMove("^!Space")
-    
+$!Space:: HandleMouseMove("!Space")
+m & Space:: 
+{
+    HandleMouseMove("m{Space}")
+
+}
+
 HandleMouseMove(key)
 {
     shortDistance := 10
@@ -69,12 +73,27 @@ HandleMouseMove(key)
         case '!j': MouseMove 0, longDistance, 0, "R"
         case '+k': MouseMove 0, -middleDistance, 0, "R"
         case 'd': MouseClick "L",,,,,"D", "R"
-        case 'Space': Send "{Click Left}"
-        case '!Space': Send "{Click Right}"
-        case '^!Space': Send "{Click Middle}"
+        case 'Space': 
+        {
+            Send "{Click Left}"
+        }
+        case '!Space':
+        {
+            Send "{Blind}{Alt up}"
+            Send "{Click Right}"
+        }
+        case 'm{Space}':
+        {
+            Send "{Click Middle}"
+        }
         }
     
     } else {  
+
+        ; XXX optimize it
+        if(key == "m{Space}"){
+            Send key
+        }
         SendOrigin(key)
     }
 }
@@ -84,8 +103,8 @@ HandleWheel(key)
     if (mode == 1) {
         switch key
         {
-        case '^j': Send "{WheelDown}"
-        case '^k': Send "{WheelUp}"
+        case '^j': Send "{Blind^}{WheelDown}"
+        case '^k': Send "{Blind^}{WheelUp}"
         case 'p': MouseClick "WL"
         case 'n': MouseClick "WR"
         }
