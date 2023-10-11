@@ -27,6 +27,8 @@ ShowTip(content, title) {
 }
 $^j::HandleWheel("^j")
 $^k::HandleWheel("^k")
+$n::HandleWheel("n")
+$p::HandleWheel("p")
 
 $h::HandleMouseMove("h")
 $l::HandleMouseMove("l")
@@ -84,6 +86,8 @@ HandleWheel(key)
         {
         case '^j': Send "{WheelDown}"
         case '^k': Send "{WheelUp}"
+        case 'p': MouseClick "WL"
+        case 'n': MouseClick "WR"
         }
     
     } else {  
