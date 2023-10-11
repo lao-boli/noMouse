@@ -42,7 +42,7 @@ $!h::HandleMouseMove("!h")
 $!l::HandleMouseMove("!l")
 $!j::HandleMouseMove("!j")
 $!k::HandleMouseMove("!k")
-$d::HandleMouseMove("d")
+$d Up::HandleMouseMove("d")
 $Space:: HandleMouseMove("Space")
 $!Space:: HandleMouseMove("!Space")
 m & Space:: 
@@ -72,7 +72,15 @@ HandleMouseMove(key)
         case '!l': MouseMove longDistance, 0, 0, "R"
         case '!j': MouseMove 0, longDistance, 0, "R"
         case '+k': MouseMove 0, -middleDistance, 0, "R"
-        case 'd': MouseClick "L",,,,,"D", "R"
+        case 'd': 
+        {
+            state := GetKeyState("LButton")
+            if(state == 0){
+                MouseClick "L",,,,,"D", "R"
+            }else {
+                MouseClick "L",,,,,"U", "R"
+            }
+        }
         case 'Space': 
         {
             Send "{Click Left}"
