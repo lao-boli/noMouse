@@ -51,6 +51,12 @@ m & Space::
 
 }
 
+$z Up:: 
+{
+    HandleMouseMove("z")
+
+}
+
 HandleMouseMove(key)
 {
     shortDistance := 10
@@ -58,6 +64,7 @@ HandleMouseMove(key)
     longDistance := 400
 
     if (mode == 1) {
+        CoordMode "Mouse"
         switch key
         {
         case 'h': MouseMove -shortDistance, 0, 0, "R"
@@ -67,11 +74,65 @@ HandleMouseMove(key)
         case '+h': MouseMove -middleDistance, 0, 0, "R"
         case '+l': MouseMove middleDistance, 0, 0, "R"
         case '+j': MouseMove 0, middleDistance, 0, "R"
-        case '!k': MouseMove 0, -longDistance, 0, "R"
+        case '+k': MouseMove 0, -middleDistance, 0, "R"
         case '!h': MouseMove -longDistance, 0, 0, "R"
         case '!l': MouseMove longDistance, 0, 0, "R"
         case '!j': MouseMove 0, longDistance, 0, "R"
-        case '+k': MouseMove 0, -middleDistance, 0, "R"
+        case '!k': MouseMove 0, -longDistance, 0, "R"
+        case 'z': 
+        {
+            loop 
+            {
+                OutputDebug A_PriorHotkey
+                OutputDebug A_ThisHotkey
+                if (GetKeyState("z", "P") and A_TimeIdleKeyboard < 500)
+                {
+                    MouseMove A_ScreenWidth / 2, A_ScreenHeight / 2
+                    return
+                }
+                if (GetKeyState("b", "P"))
+                {
+
+                    MouseMove A_ScreenWidth / 2, A_ScreenHeight
+                    return
+                }
+                else if (GetKeyState("t", "P"))
+                {
+
+                    MouseMove A_ScreenWidth / 2, 0
+                    return
+                }
+                if (GetKeyState("j", "P"))
+                {
+
+                    MouseMove A_ScreenWidth / 2, A_ScreenHeight
+                    return
+                }
+                else if (GetKeyState("k", "P"))
+                {
+
+                    MouseMove A_ScreenWidth / 2, 0
+                    return
+                }
+                else if (GetKeyState("h", "P"))
+                {
+
+                    MouseMove 0, A_ScreenHeight / 2
+                    return
+                }
+                else if (GetKeyState("l", "P"))
+                {
+
+                    MouseMove A_ScreenWidth, A_ScreenHeight / 2
+                    return
+                }
+                else if ( A_TimeIdleKeyboard != '' and A_TimeIdleKeyboard > 500)
+                {
+                    return
+                }
+                sleep 10
+            }
+        }
         case 'd': 
         {
             state := GetKeyState("LButton")
