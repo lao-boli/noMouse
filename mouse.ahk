@@ -19,6 +19,7 @@ ShowTip(content, title) {
     }
 }
 
+
 ^!m::
 {
     global mode
@@ -63,6 +64,7 @@ HandleMouseMove(key)
     middleDistance := 60
     longDistance := 400
 
+
     if (mode == 1) {
         CoordMode "Mouse"
         switch key
@@ -81,27 +83,47 @@ HandleMouseMove(key)
         case '!k': MouseMove 0, -longDistance, 0, "R"
         case 'z': 
         {
+            static zCount := 0
+            if zCount > 1 
+            {
+                zCount := 0
+                return
+            }
+            zCount := 1
+
             loop 
             {
-                OutputDebug A_PriorHotkey
-                OutputDebug A_ThisHotkey
                 if (GetKeyState("z", "P") and A_TimeIdleKeyboard < 500)
                 {
                     MouseMove A_ScreenWidth / 2, A_ScreenHeight / 2
+                    zCount += 1
                     return
                 }
-                if (GetKeyState("b", "P"))
+                if (GetKeyState("t", "P"))
                 {
 
-                    MouseMove A_ScreenWidth / 2, A_ScreenHeight
+                    MouseMove 0, 0
                     return
                 }
-                else if (GetKeyState("t", "P"))
+                else if (GetKeyState("b", "P"))
                 {
 
-                    MouseMove A_ScreenWidth / 2, 0
+                    MouseMove A_ScreenWidth, A_ScreenHeight
                     return
                 }
+                else if (GetKeyState("]", "P"))
+                {
+
+                    MouseMove A_ScreenWidth, 0
+                    return
+                }
+                else if (GetKeyState("[", "P"))
+                {
+
+                    MouseMove 0, A_ScreenHeight
+                    return
+                }
+
                 if (GetKeyState("j", "P"))
                 {
 
