@@ -60,9 +60,13 @@ $z Up::
 
 HandleMouseMove(key)
 {
+    ; negative
     neg := 0
+    ; positive
     posi := 1
+    ; vertical
     vrt := 0
+    ; horizontal
     hor := 1
 
 
@@ -195,14 +199,7 @@ HandleMouseMove(key)
 }
 SmoothMouseMove(isPosi,isHor,key,speed)
 {
-    ; prevent mutiple trigger loop
-    static work := 0
-    if (work > 0)
-    {
-        return
-    }
-    work := 1
-
+        OutputDebug "smooth"
     step := isPosi ? 1 : -1
 
     ; control mouse move speed
@@ -228,7 +225,7 @@ SmoothMouseMove(isPosi,isHor,key,speed)
     }
     delay := givenValue
 
-    loop 
+    while GetKeyState(key, "P")
     {
         if(delay <= 0){
             if (isHor){
@@ -238,13 +235,8 @@ SmoothMouseMove(isPosi,isHor,key,speed)
             }
         delay := givenValue
         }
-        if (!GetKeyState(key, "P"))
-        {
-            break
-        }
         delay := delay - 1
     }
-    work := 0
 
 }
 HandleWheel(key)
