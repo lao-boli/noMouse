@@ -39,10 +39,10 @@ $+h::HandleMouseMove("+h")
 $+l::HandleMouseMove("+l")
 $+j::HandleMouseMove("+j")
 $+k::HandleMouseMove("+k")
-$!h::HandleMouseMove("!h")
-$!l::HandleMouseMove("!l")
-$!j::HandleMouseMove("!j")
-$!k::HandleMouseMove("!k")
+; $!h::HandleMouseMove("!h")
+; $!l::HandleMouseMove("!l")
+; $!j::HandleMouseMove("!j")
+; $!k::HandleMouseMove("!k")
 $d Up::HandleMouseMove("d")
 $Space:: HandleMouseMove("Space")
 $!Space:: HandleMouseMove("!Space")
@@ -63,24 +63,32 @@ HandleMouseMove(key)
     shortDistance := 10
     middleDistance := 60
     longDistance := 400
+    neg := 0
+    posi := 1
+    vrt := 0
+    hor := 1
 
 
     if (mode == 1) {
         CoordMode "Mouse"
         switch key
         {
-        case 'h': MouseMove -shortDistance, 0, 0, "R"
-        case 'l': MouseMove shortDistance, 0, 0, "R"
-        case 'j': MouseMove 0, shortDistance, 0, "R"
-        case 'k': MouseMove 0, -shortDistance, 0, "R"
-        case '+h': MouseMove -middleDistance, 0, 0, "R"
-        case '+l': MouseMove middleDistance, 0, 0, "R"
-        case '+j': MouseMove 0, middleDistance, 0, "R"
-        case '+k': MouseMove 0, -middleDistance, 0, "R"
-        case '!h': MouseMove -longDistance, 0, 0, "R"
-        case '!l': MouseMove longDistance, 0, 0, "R"
-        case '!j': MouseMove 0, longDistance, 0, "R"
-        case '!k': MouseMove 0, -longDistance, 0, "R"
+        case 'h': SmoothMouseMove(neg,hor,key,2)
+        case 'l': SmoothMouseMove(posi,hor,key,2)
+        case 'j': SmoothMouseMove(posi,vrt,key,2)
+        case 'k': SmoothMouseMove(neg,vrt,key,2)
+        case '+h': SmoothMouseMove(neg,hor,'h',0)
+        case '+l': SmoothMouseMove(posi,hor,'l',0)
+        case '+j': SmoothMouseMove(posi,vrt,'j',0)
+        case '+k': SmoothMouseMove(neg,vrt,'k',0)
+        ; I think the two mode is enough for me now, so I commented below, 
+        ; namely, "alt + key" hotkey,
+        ; maybe it will reuse in future.
+
+        ; case '!h': MouseMove -longDistance, 0, 0, "R"
+        ; case '!l': MouseMove longDistance, 0, 0, "R"
+        ; case '!j': MouseMove 0, longDistance, 0, "R"
+        ; case '!k': MouseMove 0, -longDistance, 0, "R"
         case 'z': 
         {
             static zCount := 0
@@ -188,7 +196,49 @@ HandleMouseMove(key)
         SendOrigin(key)
     }
 }
+SmoothMouseMove(offsetDir,dir,key,speed)
+{
+    ; prevent mutiple trigger loop
+    static work := 0
+    if (work > 0)
+    {
+        return
+    }
+    work := 1
 
+    step := offsetDir ? 1 : -1
+
+    quick := 0
+    middle := 500
+    slow := 1000
+
+    givenValue := quick
+    switch speed
+    {
+        case 0: givenValue := quick
+        case 1: givenValue := middle
+        case 2: givenValue := slow
+    }
+    delay := givenValue
+    loop 
+    {
+        if(delay <= 0){
+            if (dir){
+                MouseMove step, 0, 0, "R"
+            }else {
+                MouseMove 0, step, 0, "R"
+            }
+        delay := givenValue
+        }
+        if (!GetKeyState(key, "P"))
+        {
+            break
+        }
+        delay := delay - 1
+    }
+    work := 0
+
+}
 HandleWheel(key)
 {
     if (mode == 1) {
