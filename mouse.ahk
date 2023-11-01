@@ -60,9 +60,6 @@ $z Up::
 
 HandleMouseMove(key)
 {
-    shortDistance := 10
-    middleDistance := 60
-    longDistance := 400
     neg := 0
     posi := 1
     vrt := 0
@@ -196,7 +193,7 @@ HandleMouseMove(key)
         SendOrigin(key)
     }
 }
-SmoothMouseMove(offsetDir,dir,key,speed)
+SmoothMouseMove(isPosi,isHor,key,speed)
 {
     ; prevent mutiple trigger loop
     static work := 0
@@ -206,8 +203,18 @@ SmoothMouseMove(offsetDir,dir,key,speed)
     }
     work := 1
 
-    step := offsetDir ? 1 : -1
+    step := isPosi ? 1 : -1
 
+    ; control mouse move speed
+    ; why not use Sleep?
+    ; "Due to the granularity of the OS's time-keeping system, 
+    ; Delay is typically rounded up to the nearest multiple of 10 or 15.6 milliseconds."
+    ; @see: https://www.autohotkey.com/docs/v2/lib/Sleep.htm
+    ;
+    ; so even I write "Sleep(1)" in loop,it will sleep at least 10 ms,its too slow.
+    ; and the method mentioned in the offical document to sleep for less then 10ms 
+    ; will affect the entire operating system and all applications, which is I dont want to see.
+    ; therefore, I use a counter to skip loop to control mouse move speed.
     quick := 0
     middle := 500
     slow := 1000
@@ -220,10 +227,11 @@ SmoothMouseMove(offsetDir,dir,key,speed)
         case 2: givenValue := slow
     }
     delay := givenValue
+
     loop 
     {
         if(delay <= 0){
-            if (dir){
+            if (isHor){
                 MouseMove step, 0, 0, "R"
             }else {
                 MouseMove 0, step, 0, "R"
