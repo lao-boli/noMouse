@@ -1,3 +1,4 @@
+#include "util.ahk"
 #suspendexempt
 !p::
 {
@@ -9,15 +10,6 @@
 #SuspendExempt False
 
 global mode := 1
-
-ShowTip(content, title) {
-    TrayTip content, title
-    SetTimer HideTrayTip, -1000
-
-    HideTrayTip() {
-        TrayTip 
-    }
-}
 
 
 ^!m::
@@ -199,7 +191,6 @@ HandleMouseMove(key)
 }
 SmoothMouseMove(isPosi,isHor,key,speed)
 {
-        OutputDebug "smooth"
     step := isPosi ? 1 : -1
 
     ; control mouse move speed
@@ -252,23 +243,5 @@ HandleWheel(key)
     
     } else {  
         SendOrigin(key)
-    }
-}
-
-SendOrigin(key)
-{
-    FoundPos := RegExMatch(key, "[\+\^\!]+", &Match)
-    offset := 0 
-    matchStr := "" 
-    if (Match != "") {
-        matchStr := Match[0] 
-        offset := Match.Len
-    }
-
-    pureKey := SubStr(key,offset + 1)
-    if (StrLen(pureKey) == 1 && Match == "") {
-        Send "" matchStr "{Blind}{" pureKey "}"
-    } else {
-    Send "" matchStr "{" pureKey "}"
     }
 }
