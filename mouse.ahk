@@ -31,10 +31,10 @@ $+h::HandleMouseMove("+h")
 $+l::HandleMouseMove("+l")
 $+j::HandleMouseMove("+j")
 $+k::HandleMouseMove("+k")
-; $!h::HandleMouseMove("!h")
-; $!l::HandleMouseMove("!l")
-; $!j::HandleMouseMove("!j")
-; $!k::HandleMouseMove("!k")
+$!h::HandleMouseMove("!h")
+$!l::HandleMouseMove("!l")
+$!j::HandleMouseMove("!j")
+$!k::HandleMouseMove("!k")
 $d Up::HandleMouseMove("d")
 $Space:: HandleMouseMove("Space")
 $!Space:: HandleMouseMove("!Space")
@@ -66,22 +66,22 @@ HandleMouseMove(key)
         CoordMode "Mouse"
         switch key
         {
-        case 'h': SmoothMouseMove(neg,hor,key,2)
-        case 'l': SmoothMouseMove(posi,hor,key,2)
-        case 'j': SmoothMouseMove(posi,vrt,key,2)
-        case 'k': SmoothMouseMove(neg,vrt,key,2)
+
+        ; middle 
+        case 'h': SmoothMouseMove(neg,hor,key,1)
+        case 'l': SmoothMouseMove(posi,hor,key,1)
+        case 'j': SmoothMouseMove(posi,vrt,key,1)
+        case 'k': SmoothMouseMove(neg,vrt,key,1)
+        ; quick 
         case '+h': SmoothMouseMove(neg,hor,'h',0)
         case '+l': SmoothMouseMove(posi,hor,'l',0)
         case '+j': SmoothMouseMove(posi,vrt,'j',0)
         case '+k': SmoothMouseMove(neg,vrt,'k',0)
-        ; I think the two mode is enough for me now, so I commented below, 
-        ; namely, "alt + key" hotkey,
-        ; maybe it will reuse in future.
-
-        ; case '!h': MouseMove -longDistance, 0, 0, "R"
-        ; case '!l': MouseMove longDistance, 0, 0, "R"
-        ; case '!j': MouseMove 0, longDistance, 0, "R"
-        ; case '!k': MouseMove 0, -longDistance, 0, "R"
+        ; slow 
+        case '!h': SmoothMouseMove(neg,hor,'h',2)
+        case '!l': SmoothMouseMove(posi,hor,'l',2)
+        case '!j': SmoothMouseMove(posi,vrt,'j',2)
+        case '!k': SmoothMouseMove(neg,vrt,'k',2)
         case 'z': 
         {
             static zCount := 0
@@ -202,10 +202,10 @@ SmoothMouseMove(isPosi,isHor,key,speed)
     ; so even I write "Sleep(1)" in loop,it will sleep at least 10 ms,its too slow.
     ; and the method mentioned in the offical document to sleep for less then 10ms 
     ; will affect the entire operating system and all applications, which is I dont want to see.
-    ; therefore, I use a counter to skip loop to control mouse move speed.
+    ; therefore, I use a counter to skip iteration to control mouse move speed.
     quick := 0
-    middle := 500
-    slow := 1000
+    middle := 1000
+    slow := 4000
 
     givenValue := quick
     switch speed
