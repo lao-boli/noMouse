@@ -11,6 +11,7 @@
 
 global mode := 1
 
+global zCount := 0
 
 ^!m::
 {
@@ -84,7 +85,7 @@ HandleMouseMove(key)
         case '!k': SmoothMouseMove(neg,vrt,'k',2)
         case 'z': 
         {
-            static zCount := 0
+            global zCount
             if zCount > 1 
             {
                 zCount := 0
@@ -104,24 +105,28 @@ HandleMouseMove(key)
                 {
 
                     MouseMove 0, 0
+                    zCount := 0
                     return
                 }
                 else if (GetKeyState("b", "P"))
                 {
 
                     MouseMove A_ScreenWidth, A_ScreenHeight
+                    zCount := 0
                     return
                 }
                 else if (GetKeyState("]", "P"))
                 {
 
                     MouseMove A_ScreenWidth, 0
+                    zCount := 0
                     return
                 }
                 else if (GetKeyState("[", "P"))
                 {
 
                     MouseMove 0, A_ScreenHeight
+                    zCount := 0
                     return
                 }
 
@@ -129,28 +134,33 @@ HandleMouseMove(key)
                 {
 
                     MouseMove A_ScreenWidth / 2, A_ScreenHeight
+                    zCount := 0
                     return
                 }
                 else if (GetKeyState("k", "P"))
                 {
 
                     MouseMove A_ScreenWidth / 2, 0
+                    zCount := 0
                     return
                 }
                 else if (GetKeyState("h", "P"))
                 {
 
                     MouseMove 0, A_ScreenHeight / 2
+                    zCount := 0
                     return
                 }
                 else if (GetKeyState("l", "P"))
                 {
 
                     MouseMove A_ScreenWidth, A_ScreenHeight / 2
+                    zCount := 0
                     return
                 }
                 else if ( A_TimeIdleKeyboard != '' and A_TimeIdleKeyboard > 500)
                 {
+                    zCount := 0
                     return
                 }
                 sleep 10
@@ -191,6 +201,9 @@ HandleMouseMove(key)
 }
 SmoothMouseMove(isPosi,isHor,key,speed)
 {
+    if(zCount > 0){
+        return
+    }
     step := isPosi ? 1 : -1
 
     ; control mouse move speed
