@@ -85,6 +85,9 @@ HandleMouseMove(key)
         case '!k': SmoothMouseMove(neg,vrt,'k',2)
         case 'z': 
         {
+            ; prevent cursor out of screen when move bottom and right by use z commend.
+            static moveOffset := 20
+
             global zCount
             if zCount > 1 
             {
@@ -92,6 +95,8 @@ HandleMouseMove(key)
                 return
             }
             zCount := 1
+
+            MouseGetPos &xpos, &ypos 
 
             loop 
             {
@@ -111,21 +116,21 @@ HandleMouseMove(key)
                 else if (GetKeyState("b", "P"))
                 {
 
-                    MouseMove A_ScreenWidth, A_ScreenHeight
+                    MouseMove A_ScreenWidth - moveOffset, A_ScreenHeight - moveOffset
                     zCount := 0
                     return
                 }
                 else if (GetKeyState("]", "P"))
                 {
 
-                    MouseMove A_ScreenWidth, 0
+                    MouseMove A_ScreenWidth - moveOffset, 0
                     zCount := 0
                     return
                 }
                 else if (GetKeyState("[", "P"))
                 {
 
-                    MouseMove 0, A_ScreenHeight
+                    MouseMove 0, A_ScreenHeight - moveOffset
                     zCount := 0
                     return
                 }
@@ -133,28 +138,28 @@ HandleMouseMove(key)
                 if (GetKeyState("j", "P"))
                 {
 
-                    MouseMove A_ScreenWidth / 2, A_ScreenHeight
+                    MouseMove xpos, A_ScreenHeight - moveOffset
                     zCount := 0
                     return
                 }
                 else if (GetKeyState("k", "P"))
                 {
 
-                    MouseMove A_ScreenWidth / 2, 0
+                    MouseMove xpos, 0
                     zCount := 0
                     return
                 }
                 else if (GetKeyState("h", "P"))
                 {
 
-                    MouseMove 0, A_ScreenHeight / 2
+                    MouseMove 0, ypos
                     zCount := 0
                     return
                 }
                 else if (GetKeyState("l", "P"))
                 {
 
-                    MouseMove A_ScreenWidth, A_ScreenHeight / 2
+                    MouseMove A_ScreenWidth - moveOffset, ypos
                     zCount := 0
                     return
                 }
